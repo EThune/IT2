@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Oppgave 2</title>
+	<style type="text/css">
+		body{
+			text-align: center;
+			font-weight: bold;
+			font-size: 16px;
+		}
+		main {
+			margin:auto;
+			text-align: center;
+			width: 600px;
+			height: 800px;
+			border-radius: 10px;
+			background-color: lightgrey;
+			padding: 10px;
+		}
+		#output {
+			font-size: 20px;
+		}
+		ol {
+			list-style-position: inside;
+		}
+		input {
+			width: 100px;
+		}
+	</style>
+</head>
+<body>
+	<h1>Oppgave 2</h1>
+	<main>
+		<section>
+			<h2>Oppgave 2a)</h2>
+			<p>
+				Velkommen til denne pikselkalkulatoren.<br>
+				Legg inn antall piksler i bredden og høyden for å beregne antall piksler totalt.<br>
+			</p>
+			<p>
+				<form id="skj">
+					<label for="bredde">Tast inn antall piksler i bredden</label>
+					<input type="number" min="0" max="1920" id="inpBredde"><br>
+					<label for="bredde">Tast inn antall piksler i høgden</label>
+					<input type="number" min="0" id="inpHogde"><br><br>
+					<input type="submit" value="Beregn">
+				</form>
+			</p>
+		</section>
+		<section> 
+			<p id="output">
+				
+			</p>
+		</section>
+	</main>
+	<script type="text/javascript">
+		var inpBredde = document.getElementById('inpBredde');
+		var inpHogde = document.getElementById('inpHogde');
+		var skj = document.getElementById('skj');
+		var output = document.getElementById('output');
+
+		skj.onsubmit = function(e) {
+			e.preventDefault();
+
+			var antBredde = inpBredde.value;
+			var antHogde = inpHogde.value;
+			var antPiksler = antBredde*antHogde;
+			var antMp = antPiksler/10**6;
+
+			output.innerHTML = "<p>Antall piksler i bildet er " + antPiksler + ".<br>Antall megapiksler er " + antMp.toFixed(2) + "</p>";
+
+			if (antBredde>antHogde){
+				output.innerHTML += "<img src='bilder/liggende.jpg'>";
+			} else if (antBredde<antHogde) {
+				output.innerHTML += "<img src='bilder/staaende.jpg'>";
+			} else {
+				output.innerHTML += "<img src='bilder/kvadratisk.jpg'>";
+			}
+		}
+
+
+	</script>
+</body>
+</html>

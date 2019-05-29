@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Oppgave 3</title>
+	<style type="text/css">
+		body{
+			text-align: center;
+			font-weight: bold;
+			font-size: 16px;
+		}
+		main {
+			margin:auto;
+			text-align: center;
+			width: 600px;
+			height: 800px;
+			border-radius: 10px;
+			background-color: lightgrey;
+			padding: 10px;
+		}
+		#output {
+			font-size: 20px;
+		}
+		button{
+			margin: auto;
+		}
+		
+	</style>
+</head>
+<body>
+	<h1>Oppgave 3</h1>
+	<main>
+		<section>
+			<p>
+				Velkommen til ruteplanleggeren for turisthyttene i Jotunheimen.<br>Følg instruksjonene under og planlegg din unike rute i Jotunheimen.<br>
+			</p>
+			<p>
+				<form id="skj">
+					<label id="labValg" for="selHytte">Start med å velge ditt utgangspunkt for turen</label><br>
+					<select id="selHytte">
+						<!-- Informasjon blir lagt til i JS -->
+					</select>
+					<input type="submit" value="Legg til hytte">
+				</form>
+				<button id="btnFjern" style="display:none">Fjern forrige hytte</button>
+				<button id="btnAvslutt" style="display:none">Avslutt rute</button><br>
+			</p>
+		</section>
+		<section> 
+			<p id="output">
+				
+			</p>
+		</section>
+	</main>
+	<script type="text/javascript">
+		var skj = document.getElementById('skj');
+		var labValg = document.getElementById('labValg');
+		var selHytte = document.getElementById('selHytte');
+		var btnFjern = document.getElementById('btnFjern');
+		var btnAvslutt = document.getElementById('btnAvslutt');
+		var output = document.getElementById('output');
+
+		var tmpHytter = []; // Brukt for å ta vare på hyttene en kan velge
+		var rute = []; // Skal ta vare på informasjon om valgt reiserute
+
+		var hytter = [
+			{
+				navn: "Gjendesheim",
+				avstand: [0,22,14,0,0,0,0]
+			},{
+				navn: "Glitterheim",
+				avstand: [22,0,18,0,0,17,0]
+			},{
+				navn: "Memurubu",
+				avstand: [14,18,0,10,0,0,0]
+			},{
+				navn: "Gjendebu",
+				avstand: [0,0,10,0,19,24,16]
+			},{
+				navn: "Leirvassbu",
+				avstand: [0,0,0,19,0,15,11]
+			},{
+				navn: "Spiterstulen",
+				avstand: [0,17,0,24,15,0,0]
+			},{
+				navn: "Olavsbu",
+				avstand: [0,0,0,16,11,0,0]
+			}
+
+		]
+
+		skj.onsubmit = function(e) {
+			e.preventDefault(); // For å unngå lasting av side
+			var hytteIndeks = selHytte.selectedIndex;
+			var avstander = tmpHytter[hytteIndeks].avstand;
+			
+			rute[rute.length] = hentIndeks(tmpHytter[hytteIndeks].navn);
+
+			visHytter(avstander);
+
+			if(rute.length==1){
+				labValg.innerHTML = "Legg til neste hytte";
+				btnFjern.style.display = "block";
+			}
+
+			if(rute.length==2){
+				btnAvslutt.style.display = "block";
+			}
+
+			oppdaterRute();
+		}
+
+		function visHytter(avstander){
+			selHytte.innerHTML = ""; // Fjerner alle valg fra nedtrekkslisten
+			tmpHytter = []; // Fjerner forrige valg i nedtrekkslisten
+
+			for (var i = 0; i < avstander.length; i++) {
+				if (avstander[i]>0){
+					var tmp = document.createElement('option');
+					tmp.text = hytter[i].navn;
+					selHytte.add(tmp);
+					tmpHytter[tmpHytter.length] = hytter[i];
+				}
+			}
+		}
+
+		function hentIndeks(n){
+			for (var i = 0; i < hytter.length; i++) {
+				if (hytter[i].navn===n) {
+					return i;
+				}
+			}
+		}
+
+		function oppdaterRute(){
+			if(rute.length>0){
+				output.innerHTML = "Start - ";
+				for (var i = 0; i < rute.length; i++) {
+					output.innerHTML += hytter[rute[i]].navn + " - ";
+				}
+				output.innerHTML += " Slutt";
+			} else {
+				output.innerHTML = "Du må velge minst 1 hytte.";
+			}
+		}
+
+		btnFjern.onclick = function(){
+			rute.pop();
+			oppdaterRute();
+
+			if(rute.length==0){
+				labValg.innerHTML = "Legg til neste hytte";
+				btnFjern.style.display = "none";
+				init();
+			} else{
+				visHytter(hytter[rute[rute.length-1]].avstand);
+				if(rute.length==1){
+					btnAvslutt.style.display = "none";
+				}
+			}		
+		}
+
+		btnAvslutt.onclick = function(){
+			var tmpAvstand;
+			var sumAvstand = 0;
+			output.innerHTML += "<br>Avstander:";
+			for (var i = 0; i < rute.length-1; i++) {
+				tmpAvstand = hytter[rute[i]].avstand[rute[i+1]]
+				output.innerHTML += " " + tmpAvstand + "km - ";
+				sumAvstand += tmpAvstand;
+			}
+			output.innerHTML += " Totalt: " + sumAvstand + "km";
+		}
+
+		// Legger til alle hyttene i nedtrekkslisten
+		function init(){
+			for (var i = 0; i < hytter.length; i++) {
+				var tmp = document.createElement('option');
+				tmp.text = hytter[i].navn;
+				selHytte.add(tmp);
+			}
+			tmpHytter = hytter; // Kan velge alle hyttene
+		}
+
+		init()
+	</script>
+</body>
+</html>

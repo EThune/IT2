@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Oppgave 1</title>
+	<style type="text/css">
+		body{
+			text-align: center;
+		}
+		main {
+			margin:auto;
+			text-align: center;
+			width: 600px;
+			height: 800px;
+			border-radius: 10px;
+			background-color: lightgrey;
+			padding: 10px;
+		}
+		#output {
+			font-weight: bold;
+		}
+		ol {
+			list-style-position: inside;
+		}
+	</style>
+</head>
+<body>
+	<h1>Oppgave 1</h1>
+	<main>
+		<section> <!-- Info -->
+			<p>	
+				Under ser du et bilde som er satt sammen av tre bilder med disse bruksområdene:
+				<ol>
+					<li>Til bruk på nettside</li>
+					<li>Til bruk på nettside</li>
+					<li>Til bruk som logo på store reklameskilt</li>
+				</ol>
+				Ved å klikke på ett av bildene under kan du få litt informasjon om bildene.
+			</p>
+		</section>
+		<section> <!-- Bilde -->
+			<img src="fjell2.jpg" width="400px" alt="Fjell" usemap="#fjell">
+			<map name="fjell">
+				<area shape="rect" coords="0,0,400,178" onclick="visInfo(0)">
+				<area shape="rect" coords="0,178,400,389" onclick="visInfo(1)">
+				<area shape="rect" coords="0,389,400,568" onclick="visInfo(2)">
+			</map>
+		</section>
+		<section>
+			<p id="output">
+				<!-- Her kommer informasjon om valgt bilde -->
+			</p>
+		</section>
+	</main>
+	<script type="text/javascript">
+		var bildene = document.getElementsByTagName('area');
+		var output = document.getElementById('output');
+
+		var info = [
+			"Dette bilde er et typisk fotografi og det er anbefalt å bruke punktgrafikk og f.eks. filformatet jpg. Punktgrafikk betyr at det er lagret informasjon om hver piksel/punkt i bildet.",
+			"Dette bilde er et redigert eksemplar av et fotografi der det er ønskelig å få bakgrunnen til å ha en gjennomsiktig farge. Filformatet som brukes her kan vere png. Dette bilde er også av typen punktgrafikk",
+			"Dette bilde kan brukes i alle størrelser, siden dette er et bilde av typen vektorgrafikk. Her lages bilde utifra informasjon som er lagret som vektorer, som betyr at kvaliteten på bildet blir uforandret uansett størrelse."
+		]
+
+		function visInfo(i){
+			output.innerHTML = info[i];
+		}
+	</script>
+</body>
+</html>
